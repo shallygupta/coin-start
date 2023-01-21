@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import CoinSummarPage from './pages/CoinSummarPage';
+import { QueryClient , QueryClientProvider } from 'react-query';
+import { WatchListContextProvider } from './context/watchListContext';
+import CoinDetailPage from './pages/CoinDetailPage';
 
+const querClient = new QueryClient({
+  defaultOptions:{
+    queries:{
+      refetchOnWindowFocus : false,
+
+      retry: false
+    }
+  }
+})
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       <QueryClientProvider client={querClient}>
+     
+      <WatchListContextProvider>
+      <BrowserRouter>
+        <Routes>
+        <Route  path='/' element  = {<CoinSummarPage/>}></Route>
+        <Route  path='/coins/:cryptocurrency' element  = {<CoinDetailPage/>}></Route>
+
+        </Routes>
+      </BrowserRouter>
+      
+      </WatchListContextProvider>
+      </QueryClientProvider>
     </div>
   );
 }
