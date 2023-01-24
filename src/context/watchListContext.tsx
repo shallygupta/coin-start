@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import { useQueryClient } from "react-query";
 
 type DeleteCoin = (coin:any)=>void
 
@@ -9,7 +8,6 @@ export const WatchListContext = createContext<
 
 export const WatchListContextProvider = ({ children }: any) => {
   const [watchList, setWatchList] = useState(["bitcoin", "ethereum", "ripple"]);
-  const queryClient = useQueryClient();
   const deleteCoin = (coin:any)=>{
     const list = watchList.filter(id=>{return id!==coin});
     setWatchList(list);

@@ -17,19 +17,18 @@ const querClient = new QueryClient({
 function App() {
   return (
     <div className="App">
-       <QueryClientProvider client={querClient}>
-     
+      
       <WatchListContextProvider>
-      <BrowserRouter>
+      
         <Routes>
         <Route  path='/' element  = {<CoinSummarPage/>}></Route>
         <Route  path='/coins/:cryptocurrency' element  = {<CoinDetailPage/>}></Route>
 
         </Routes>
-      </BrowserRouter>
+      
       
       </WatchListContextProvider>
-      </QueryClientProvider>
+      
     </div>
   );
 }

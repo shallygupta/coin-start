@@ -1,28 +1,37 @@
-import React from 'react'
-import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
-import HistoryChart from '../components/HistoryChart';
-import { fetchCoinDetail } from '../helpers/apis/coin.api';
+import React from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import HistoryChart from "../components/HistoryChart";
+import { fetchCoinDetail } from "../helpers/apis/coin.api";
 
 const CoinDetailPage = () => {
-  const {cryptocurrency} = useParams();
-  console.log(cryptocurrency);
-  const param= {
-    id : cryptocurrency,
+  const { cryptocurrency } = useParams();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [coin, setCoin] = useState();
+  const params = {
+    id: cryptocurrency,
     vs_currency: "usd",
-    days : "1"
-  }
-  const {isLoading, data}=useQuery("coinDetail",()=>{
-    return fetchCoinDetail(param);
-  });
+    days: "1",
+  };
 
-  if(isLoading){
-    return <div>Loading ...</div>
-
-  }
+  useEffect(() => {
+    setIsLoading(true);
+    async function fetchData() {
+      const data = await fetchCoinDetail(params);
+      setCoin(data);
+      setIsLoading(false);
+    }
+    fetchData();
+  }, []);
   return (
-    <div><HistoryChart/></div>
-  )
-}
+    <div data-testid="coin-detail-page">
+      {isLoading ? (
+        <div>Loading ...</div>
+      ) : (
+        <div data-testid="coin-page">{cryptocurrency}</div>
+      )}
+    </div>
+  );
+};
 
-export default CoinDetailPage
+export default CoinDetailPage;
